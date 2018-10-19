@@ -10,11 +10,12 @@ import HSSTH from './components/HSSTH';
 import { name as appName } from './app.json';
 import { StackNavigator } from 'react-navigation';
 import Details from './components/Details'
+import UsersMap from './components/UsersMap'
 // import { TabNavigator } from 'react-navigation';
 import {  HSTHTNScreen,
     HSTDScreen,
     HSSTHScreen } from './screenNames';
-const App = StackNavigator({
+const App1 = StackNavigator({
     HSTHTNScreen: {
         screen: HSTHTN,
         navigationOptions: {
@@ -51,4 +52,4 @@ class Main extends Component {
         return maninScreen
     }
 }
-AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerComponent(appName, () => Details);

@@ -6,7 +6,9 @@ import Header from './Header';
 import flatListData from '../data/flatListData';
 import { PostWork } from '../networking/Server';
 import { refreshDataFromServer } from './HSTHTN';
-import ImagePicker from 'react-native-image-picker'
+import ImagePicker from 'react-native-image-picker';
+import UsersMap from './UsersMap'
+
 const options = {
     title: 'Select Avatar',
     customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
@@ -42,7 +44,7 @@ export default class Details_HSTHTN extends Component {
                 this.setState({
                     avatarSource1: source,
                     
-                    avatarSource2: source,
+                    
                 });
                 
             }
@@ -83,6 +85,7 @@ export default class Details_HSTHTN extends Component {
                             })}
                             multiline={true} autoFocus={false} returnKeyType="done" onSubmitEditing={Keyboard.dismiss}
                         />
+                        <UsersMap />
                         <Button style={{ fontSize: 16, color: 'red' }}
                             onPress={() => {
                                 if (this.state.result.length == 0) {
@@ -120,6 +123,7 @@ export default class Details_HSTHTN extends Component {
                     </View>
 
                 </View>
+                {/* <View style={styles.map1}></View> */}
 
             </View>
         )
@@ -128,6 +132,9 @@ export default class Details_HSTHTN extends Component {
 
 
 const styles = StyleSheet.create({
+    map1:{
+        
+    },
     container: {
         flex: 1,
         backgroundColor: 'white',
