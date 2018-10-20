@@ -6,17 +6,17 @@ import Header from './Header';
 import flatListData from '../data/flatListData';
 import { PostWork } from '../networking/Server';
 import { refreshDataFromServer } from './HSTHTN';
-import ImagePicker from 'react-native-image-picker';
+// import ImagePicker from 'react-native-image-picker';
 import UsersMap from './UsersMap'
 
-const options = {
-    title: 'Select Avatar',
-    customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
-    storageOptions: {
-        skipBackup: true,
-        path: 'images',
-    },
-};
+// const options = {
+//     title: 'Select Avatar',
+//     customButtons: [{ name: 'fb', title: 'Choose Photo from Facebook' }],
+//     storageOptions: {
+//         skipBackup: true,
+//         path: 'images',
+//     },
+// };
 
 export default class Details_HSTHTN extends Component {
     constructor(props) {
