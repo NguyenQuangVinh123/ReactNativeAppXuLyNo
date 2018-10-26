@@ -31,10 +31,6 @@ export default class Details_HSTHTN extends Component {
             avatarSource1: null,
             userLocation: null
         }
-        let img = this.state.avatarSource1 == null ? null : <Image source={this.state.avatarSource1} style={{ height: 200, width: 200 }} />
-            let array = [];
-           array.push(img);
-           console.log(array[1]);
 
     }
 
@@ -87,6 +83,7 @@ export default class Details_HSTHTN extends Component {
     // }
     imagepickershow = () => {
         ImagePicker.showImagePicker(options, (response) => {
+            console.log(response.path);
             if (response.didCancel) {
                 console.log('User cancelled image picker');
             } else if (response.error) {
@@ -108,10 +105,12 @@ export default class Details_HSTHTN extends Component {
     back = () => {
         this.props.navigation.goBack();
     }
-   
+
     render() {
-      
-  
+        let img = this.state.avatarSource1 == null ? null : <Image source={this.state.avatarSource1} style={{ height: 200, width: 200 }} />
+
+        let img2 = this.state.avatarSource2 == null ? null : <Image source={this.state.avatarSource2} style={{ height: 100, width: 100 }} />
+        var arr = []
         return (
             <View style={styles.container}>
                 <View style={styles.header}>
@@ -173,141 +172,8 @@ export default class Details_HSTHTN extends Component {
                             })}
                             multiline={true} autoFocus={false} returnKeyType="done" onSubmitEditing={Keyboard.dismiss}
                         />
-                        {/* <UsersMap /> */}
-
-
-                        <View >
-                            <TouchableOpacity style={{ marginTop: 20, marginBottom: 20 }} onPress={this.imagepickershow.bind(this)}>
-                                <Text style={{ color: 'red' }}>Take Picture</Text>
-                            </TouchableOpacity>
-                            {/* {img} */}
-
-                            {/* <Image source={
-                                "file:///data/user/0/com.appxulyno_final/cache/react-native-image-crop-picker/5a7844f5-50ed-436d-90c4-4c2048d0fd10.jpg"
-                            } style={{ height: 200, width: 200 }} /> */}
-                            <Image style={{ width: 50, height: 50 }} source={{ uri: '/storage/emulated/0/Pictures/images/image-fa6e77eb-f521-4b42-a93b-c2bb21617afe.jpg' }} />
-                        </View>
-                        <View>
-                            <FetchLocation onGetLocation={this.getUserLocationHandler} />
-                            <UsersMap userLocation={this.state.userLocation} />
-                        </View>
                     </View>
-
-                    <Button style={{ fontSize: 16, color: 'red' }}
-                        onPress={() => {
-                            if (this.state.result.length == 0) {
-                                alert("Bạn phải điền thông tin kết quả thực hiện");
-                                return;
-                            }
-                            const result1 = {
-                                key: "",
-                                name: "",
-                                imageUpload: "",
-                                kq: this.state.result,
-                            };
-
-                            PostWork(result1).then((result) => {
-                                if (result === 'ok') {
-                                    this.props.parentFlatList.refreshDataFromServer();
-                                }
-                            });
-                        }}
-                    >Save
-                        </Button>
-                    <View style={styles.column2}>
-                        <Image style={styles.icon}
-                            source={require('../image/running.png')}
-                        />
-
-                    </View>
-
                 </View>
-                {/* <View style={styles.map1}></View> */}
-
             </View>
         )
     }
-}
-
-
-const styles = StyleSheet.create({
-    uploadAvatar: {
-        width: 200,
-        height: 200,
-    },
-    map1: {
-
-    },
-    container: {
-        flex: 1,
-        backgroundColor: 'white',
-    },
-    firstrowtext: {
-        fontWeight: 'bold',
-        color: 'green',
-        fontSize: 16,
-    },
-
-    bodycontent: {
-
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginLeft: 20,
-        marginRight: 20,
-        marginBottom: 20,
-        marginTop: 20,
-    },
-    column1: {
-        width: "70%",
-        flexDirection: "column",
-
-    },
-    column2: {
-        flexDirection: "column",
-
-    },
-    icon: {
-        width: 30,
-        height: 30
-    },
-    header: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        flex: 10,
-        backgroundColor: "#008b43",
-    },
-    tab: {
-        flex: 5,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        fontWeight: '600',
-    },
-    content: {
-        flex: 85,
-    },
-    tab1: {
-        fontSize: 12,
-        color: 'white',
-        backgroundColor: '#002411',
-        padding: 10,
-    },
-    logo: {
-        position: 'absolute',
-        width: 200,
-        height: 70,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    tab2: {
-        fontSize: 12,
-        color: 'white',
-        backgroundColor: '#002411',
-        padding: 10,
-    },
-    tab3: {
-        fontSize: 12,
-        color: 'white',
-        backgroundColor: '#002411',
-        padding: 10,
-    },
-});

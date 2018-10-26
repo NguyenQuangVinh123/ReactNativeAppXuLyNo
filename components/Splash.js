@@ -8,7 +8,7 @@ export default class Splash extends Component {
     }
     render() {
         return (
-            <View style={styles.container}>
+            <View style={styles.container }>
               
                 
                 
@@ -29,11 +29,10 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        // resizeMode : 'center',
         
     },
-    background :{
-        resizeMode : 'center',
-    },
+ 
     logo :{
         position: 'absolute',
         width: 200,

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, Image, FlatList ,TouchableOpacity } from 'react-native';
+import { Platform, StyleSheet, Text, View, Image, FlatList ,TouchableOpacity,SafeAreaView} from 'react-native';
 import Button from 'react-native-button';
 import Header from './Header';
 import flatListData from '../data/flatListData';
@@ -22,7 +22,7 @@ class FlatListItem_HSTD extends Component {
                             source={require('../image/running.png')}
                         />
                         <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: "green", marginTop: 15, justifyContent: "center", alignItems: "center" }}>
-                            <TouchableOpacity><Text>Xem</Text></TouchableOpacity>
+                            <TouchableOpacity onPress={() => this.props.navigation.navigate(DetailsScreen)}><Text>Xem</Text></TouchableOpacity>
 
                         </View>
 
@@ -52,6 +52,7 @@ export default class HSTD extends Component {
         const { navigation } = this.props;
 
         return (
+<SafeAreaView style={styles.container}>
 
             <View style={styles.container}>
                 <View style={styles.header}>
@@ -72,7 +73,7 @@ export default class HSTD extends Component {
                             navigation.navigate(HSSTHScreen);
                         }}>
                         HS SẼ THỰC HIỆN
-            </Button>
+                    </Button>
                 </View>
                 <View style={styles.content}>
                     <FlatList data={flatListData}
@@ -91,6 +92,7 @@ export default class HSTD extends Component {
                 </View>
 
             </View>
+            </SafeAreaView>
         )
     }
 }
@@ -115,6 +117,8 @@ const styles = StyleSheet.create({
     },
     column1: {
         flexDirection: "column",
+        width :"85%",
+
 
     },
     column2: {

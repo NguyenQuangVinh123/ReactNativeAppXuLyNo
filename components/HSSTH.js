@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
-import { Platform, StyleSheet, Text, View, Image, FlatList ,TouchableOpacity} from 'react-native';
-import { HSTHTNScreen, HSTDScreen } from '../screenNames';
+import { Platform, StyleSheet, Text, View, Image, FlatList, TouchableOpacity ,SafeAreaView} from 'react-native';
+import { HSTHTNScreen, HSTDScreen, DetailsScreen } from '../screenNames';
 import Button from 'react-native-button';
 import Header from './Header';
 import flatListData from '../data/flatListData';
 
+import { navigate } from 'react-navigation';
+
 class FlatListItem_HSTH extends Component {
     render() {
+        // alert(JSON.stringify(this.props.data))
+         const { navigation } = this.props;
+
         return (
+
             <View style={{ backgroundColor: this.props.index % 2 == 0 ? "#e5e5e5" : "#ffffff" }}>
                 <View style={styles.bodycontent}>
                     <View style={styles.column1}>
@@ -21,7 +27,10 @@ class FlatListItem_HSTH extends Component {
                             source={require('../image/reading.png')}
                         />
                         <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: "green", marginTop: 15, justifyContent: "center", alignItems: "center" }}>
-                        <TouchableOpacity><Text>Xem</Text></TouchableOpacity>
+                            <Button 
+                                onPress={() => navigation.navigate(DetailsScreen)}>
+                                Xem
+                        </Button>
 
                         </View>
 
@@ -39,13 +48,14 @@ class FlatListItem_HSTH extends Component {
         );
     }
 }
-
-
 export default class HSSTH extends Component {
 
     render() {
         const { navigation } = this.props;
+
         return (
+            <SafeAreaView style={styles.container}>
+
             <View style={styles.container}>
                 <View style={styles.header}>
                     <Header />
@@ -68,8 +78,9 @@ export default class HSSTH extends Component {
                 </View>
                 <View style={styles.content}>
                     <FlatList data={flatListData}
+                       
                         renderItem={({ item, index }) => {
-                            return (<FlatListItem_HSTH item={item} index={index} ></FlatListItem_HSTH>);
+                            return (<FlatListItem_HSTH  navigation = {this.props.navigation} item={item} index={index} ></FlatListItem_HSTH>);
                         }}
                     >
                     </FlatList>
@@ -77,6 +88,7 @@ export default class HSSTH extends Component {
                 </View>
 
             </View>
+            </SafeAreaView>
         )
     }
 }
@@ -117,6 +129,7 @@ const styles = StyleSheet.create({
     },
     column1: {
         flexDirection: "column",
+        width :"85%",
 
     },
     content: {

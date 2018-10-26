@@ -1,40 +1,104 @@
 /** @format */
 import React, { Component } from 'react';
-import { AppRegistry } from 'react-native';
-// import App from './App';
+import { AppRegistry,TouchableOpacity } from 'react-native';
+import App from './App';
 import Splash from './components/Splash';
-import Login from './components/Login';
 import HSTHTN from './components/HSTHTN';
 import HSTD from './components/HSTD';
 import HSSTH from './components/HSSTH';
 import { name as appName } from './app.json';
-import { StackNavigator } from 'react-navigation';
+import { StackNavigator , TabNavigator ,createStackNavigator,createTabNavigator ,TabBarBottom,createBottomTabNavigator,createMaterialTopTabNavigator} from 'react-navigation';
 import Details from './components/Details'
 import UsersMap from './components/UsersMap'
-// import { TabNavigator } from 'react-navigation';
-import {  HSTHTNScreen,
-    HSTDScreen,
-    HSSTHScreen } from './screenNames';
-const App1 = StackNavigator({
-    HSTHTNScreen: {
-        screen: HSTHTN,
-        navigationOptions: {
-            headerTitle: 'Trong Đêm',
-        }
-    },
-    HSTDScreen: {
-        screen: HSTD,
-        navigationOptions: {
-            headerTitle: 'Tồn đọng',
-        }
-    },
-    HSSTHScreen: {
-        screen: HSSTH,
-        navigationOptions: {
-            headerTitle: 'Thuc hiện',
-        }
-    },
+import {  HSTHTNScreen,HSTDScreen,HSSTHScreen,DetailsScreen } from './screenNames';
+import TestABCD from './components/TestABCD';
+import TestFlatList from './components/TestFlatList';
+
+const HSTHTNStack = createStackNavigator({
+    HSTHTNScreen : {screen: HSTHTN,navigationOptions :{
+        header : null
+    }},
+    DetailsScreen :{screen: Details,navigationOptions :{
+        header : null
+    }} ,
 });
+const HSTDStack = createStackNavigator({
+    HSTDScreen : {screen: HSTD,navigationOptions :{
+        header : null
+    }},
+    DetailsScreen :{screen: Details,navigationOptions :{
+        header : null
+    }} ,
+});
+const HSSTHStack = createStackNavigator({
+    HSSTHScreen : {screen: HSSTH,navigationOptions :{
+        header : null,
+        
+    }},
+    DetailsScreen :{screen: Details,navigationOptions :{
+        header : null
+    }} ,
+});
+
+
+const TabNavigatorTest =  createTabNavigator({
+    HSTHTN : { screen: HSTHTNStack,navigationOptions:{
+        title : "HS TH TRONG NGÀY",
+        
+        
+    }},
+    HSTD : { screen: HSTDStack,navigationOptions:{
+        title : "HS TỒN ĐỌNG",
+       
+    } },
+    HSSTH : { screen: HSSTHStack,navigationOptions:{
+        title : "HS SẼ THỰC HIỆN",
+       
+    }},
+   
+},{
+    tabBarComponent :TabBar,
+    tabBarPosition : "top",
+    swipeEnabled : true,
+    animationEnabled : true,
+    tabStyle:{
+        
+    },
+    tabBarOptions: {   
+        activeBackgroundColor : "red",
+        inactiveBackgroundColor : "yellow",
+        labelStyle : {
+            fontSize : 10,
+            fontWeight : 'bold',      
+            justifyContent : "space-between",
+            paddingBottom : 10,
+           
+        },
+      
+        // style : {
+        //     backgroundColor: 'transparent',
+        //     borderTopWidth: 0,
+        //     position: 'absolute',
+        //     left: 50,
+        //     right: 50,
+        //     bottom: 20,
+        //     height: 100
+        // },
+        // tabStyle : {
+        //     position : "absolute",
+        //     width : "100%",
+        //     height : 70,
+        //     top : 90,
+        //  }
+        
+      },
+});
+export{TabNavigatorTest,TabBar};
+class TabBar extends Component {
+    render() {
+      return <View style={{}} />
+    }
+  }
 class Main extends Component {
     constructor(props) {
         super(props);
@@ -48,8 +112,8 @@ class Main extends Component {
     }
     render() {
         const { currentScreen } = this.state
-        let maninScreen = currentScreen === 'Splash' ? <Splash /> : <Login />
+        let maninScreen = currentScreen === 'Splash' ? <Splash /> : <App />
         return maninScreen
     }
 }
-AppRegistry.registerComponent(appName, () => Details);
+AppRegistry.registerComponent(appName, () => Main );

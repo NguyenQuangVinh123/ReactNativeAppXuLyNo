@@ -4,18 +4,11 @@ import Button from 'react-native-button';
 import { HSTDScreen, HSSTHScreen, DetailsScreen } from '../screenNames';
 import Header from './Header';
 import flatListData from '../data/flatListData';
-import TabNavigatorTestABC from '../index';
+import TabNavigatorTestABC from '..';
 import TestABCD from './TestABCD';
-import { TabBar } from '../index'
-import { getListCongViec } from '../networking/Server';
+import { TabBar } from '..'
+import {getListCongViec} from '../networking/Server';
 class FlatListItem_HSTHTN extends Component {
-    constructor(props) {
-        super(props);
-        this.state = ({
-            ListWorkFromServer: []
-        });
-
-    }
     render() {
         const { navigation } = this.props;
 
@@ -23,8 +16,8 @@ class FlatListItem_HSTHTN extends Component {
             <View style={{ backgroundColor: this.props.index % 2 == 0 ? "#e5e5e5" : "#ffffff" }}>
                 <View style={styles.bodycontent}>
                     <View style={styles.column1}>
-                        <Text style={styles.firstrowtext}>CIF: {this.props.item.CIF} <Text style={{ color: "black", fontWeight: "normal" }}> | {this.props.item.DATE_DONE}</Text></Text>
-                        <Text style={{ color: "black", fontWeight: "bold", paddingBottom: 8 }}>Tên: <Text style={{ fontWeight: "normal" }}>{this.props.item.CUST_NAME}</Text></Text>
+                        <Text style={styles.firstrowtext}>CIF: {item.CIF} <Text style={{ color: "black", fontWeight: "normal" }}> | 22/10/2018</Text></Text>
+                        <Text style={{ color: "black", fontWeight: "bold", paddingBottom: 8 }}>Tên: <Text style={{ fontWeight: "normal" }}>{item.CUST_NAME}</Text></Text>
                         {/* <Text style={{ color: "black", fontWeight: "bold", paddingBottom: 8 }}>Địa chỉ: <Text style={{ fontWeight: "normal" }}>350/2 Nguyễn Văn Lượng,p16,quận Gò Vấp, TPHCM</Text></Text> */}
                         <Text style={{ color: "black", fontWeight: "bold", paddingBottom: 8 }}>Phương án: <Text style={{ fontWeight: "normal" }}>{this.props.item.SOLUTION_NAME}</Text></Text>
                     </View>
@@ -53,7 +46,7 @@ class FlatListItem_HSTHTN extends Component {
 }
 
 
-export default class HSTHTN extends Component {
+export default class TestFlatList extends Component {
     // static navigationOptions = ({navigation})=>{
     //     const { params = {}} = navigation.state;
     //     let tabBarLabel = 'HSTHTN';
@@ -66,31 +59,30 @@ export default class HSTHTN extends Component {
         });
 
     }
-
+    
     componentDidMount() {
         this.refreshDataFromServer();
     }
-    onRefresh = () => {
-        this.refreshDataFromServer();
+    // onRefresh = () => {
+    //     this.refreshDataFromServer();
 
-    }
+    // }
 
     refreshDataFromServer = () => {
-        this.setState({ refreshing: true });
-        getListCongViec().then((works) => {
-            
-            this.setState({ ListWorkFromServer: works });
-            
-            this.setState({ refreshing: false });
+        // this.setState({ refreshing: true });
+        getListCongViec().then((Items) => {
+            console.log(Items);
+            this.setState({ ListWorkFromServer: Items });
+            // this.setState({ refreshing: false });
 
         }).catch((error) => {
-
+           
             this.setState({ ListWorkFromServer: [] });
-            this.setState({ refreshing: false });
+            // this.setState({ refreshing: false });
 
         });
     }
-
+    
     render() {
         const { navigation } = this.props;
         // let dataScence = {
@@ -127,21 +119,20 @@ export default class HSTHTN extends Component {
                     <FlatList
                         ref={"flatList"}
                         data={this.state.ListWorkFromServer}
-                        // data = {flatListData}
+                        
                         renderItem={({ item, index }) => {
                             return (<FlatListItem_HSTHTN navigation={this.props.navigation} item={item} index={index} parentFlatList={this} ></FlatListItem_HSTHTN>);
                         }}
-                        keyExtractor ={(item,index)=>item.CIF}
+                       
 
 
-                    refreshControl={
-                        <RefreshControl 
-                            refreshing = {this.state.refreshing}
-                            onRefresh = {this.onRefresh}
-                            
+                    // refreshControl={
+                    //     <RefreshControl 
+                    //         refreshing = {this.state.refreshing}
+                    //         onRefresh = {this.onRefresh}
 
-                        />
-                    }
+                    //     />
+                    // }
                     >
                     </FlatList>
                     {/* <View
@@ -151,6 +142,9 @@ export default class HSTHTN extends Component {
                                 borderBottomWidth: 1,
                             }}
                         /> */}
+                    {/* <TouchableOpacity style={{ marginTop: 20, marginBottom: 20 }} onPress={this.signIn}>
+                                <Text style={{ color: 'red' }}>Take Picture</Text>
+                            </TouchableOpacity> */}
                 </View>
 
             </View>
