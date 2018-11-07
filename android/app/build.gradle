@@ -101,6 +101,7 @@ android {
         applicationId "com.appxulyno_final"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
+        vectorDrawables.useSupportLibrary = true
         versionCode 1
         versionName "1.0"
         ndk {
@@ -137,6 +138,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-image-picker')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     
     implementation "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"

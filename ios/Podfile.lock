@@ -27,6 +27,7 @@ PODS:
   - GoogleMaps/Base (2.5.0)
   - GoogleMaps/Maps (2.5.0):
     - GoogleMaps/Base
+  - QBImagePickerController (3.4.0)
   - React (0.57.2):
     - React/Core (= 0.57.2)
   - react-native-google-maps (0.22.0):
@@ -80,6 +81,11 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
+  - RNImageCropPicker (0.21.2):
+    - QBImagePickerController
+    - React/Core
+    - RSKImageCropper
+  - RSKImageCropper (2.2.1)
   - yoga (0.57.2.React)
 
 DEPENDENCIES:
@@ -103,6 +109,7 @@ DEPENDENCIES:
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTVibration (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
+  - RNImageCropPicker (from `../node_modules/react-native-image-crop-picker`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga/yoga.podspec`)
 
 SPEC REPOS:
@@ -110,6 +117,8 @@ SPEC REPOS:
     - boost-for-react-native
     - Google-Maps-iOS-Utils
     - GoogleMaps
+    - QBImagePickerController
+    - RSKImageCropper
 
 EXTERNAL SOURCES:
   DoubleConversion:
@@ -124,6 +133,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-maps"
   react-native-maps:
     :path: "../node_modules/react-native-maps"
+  RNImageCropPicker:
+    :path: "../node_modules/react-native-image-crop-picker"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga/yoga.podspec"
 
@@ -134,11 +145,14 @@ SPEC CHECKSUMS:
   glog: e8acf0ebbf99759d3ff18c86c292a5898282dcde
   Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
   GoogleMaps: c087b8e5dfe87ca6ebf59adb9b4894a4146bec4f
+  QBImagePickerController: d54cf93db6decf26baf6ed3472f336ef35cae022
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
   react-native-google-maps: b946d62e25dc66097921ed82520e45b0b081768a
   react-native-maps: 066c2afcc89e18726377bcc685315f989ca22449
+  RNImageCropPicker: 32ca4b9fef4e1b7b85ba69494242122948117e06
+  RSKImageCropper: 98296ad26b41753f796b6898d015509598f13d97
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: 865e4bc27a0a5f1e963851890e3d435fb41bd2ce
+PODFILE CHECKSUM: 49e85299bcf893dc65ba8df78c666e6802f2e1c3
 
 COCOAPODS: 1.5.3

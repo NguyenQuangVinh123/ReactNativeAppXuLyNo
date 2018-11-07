@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import {Alert,
+import {
+    Alert,
     Platform, StyleSheet, Keyboard,
     TouchableWithoutFeedback, StatusBar, Text,
     SafeAreaView, View, Image, TextInput,
-    TouchableOpacity, AsyncStorage, KeyboardAvoidingView,Button
+    TouchableOpacity, AsyncStorage, KeyboardAvoidingView, Button
 } from 'react-native';
-import { HSTDScreen,HSTHTNScreen, HSSTHScreen, DetailsScreen,LoginScreen } from '../../screenNames';
+import { HSTDScreen, HSTHTNScreen, HSSTHScreen, DetailsScreen, LoginScreen } from '../../screenNames';
 import { createStackNavigator } from 'react-navigation';
-import {LoginStack} from '../../index'
+import { LoginStack } from '../../index'
 import styles, { IMAGE_HEIGHT, IMAGE_HEIGHT_SMALL } from './styles';
 import HSSTH from '../HSSTH';
+import CryptoJS from 'crypto-js';
 // import TestABCD from '../TestABCD'
 const EMAIL_REGEX = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
@@ -20,27 +22,34 @@ export default class Login extends Component {
         this.state = {
             email: '',
             password: '',
-
+            encrypted: '',
         }
     }
     // goToHSTNTN = () => {
     //     const { navigation } = this.props;
     //     navigation.push({ HSTNTN: HSTDScreen });
-    // }
+    // }    
+
     _signIn = () => {
-        const {email,password} = this.state
-        // if (!EMAIL_REGEX.test(this.state.email)) {
-        //     Alert.alert('Dữ liệu lỗi', 'Email nhập vào không đúng định dạng!');
-        //     return;
-        // }
-        // if (!this.state.password) {
-        //     Alert.alert('Dữ liệu lỗi', 'Password không được để trống!');
-        //     return;
-        // }
-        
-        //   this.setState({ loading: true });
-        //   setTimeout(() => goToServices(), 1000);
-        fetch("http://10.160.4.55:8822/Login", {
+         let pass = this.encryptFun(this.state.password);
+         pass = (pass + " ").trim();
+         let g = pass;
+         console.log(pass);
+        const { email, password } = this.state
+        const userId = this.state.email;
+        AsyncStorage.setItem('userId', userId);
+        // const saveUserId = async userId => {
+        //     try {
+        //         await AsyncStorage.setItem('userId', userId);
+
+        //     } catch (error) {
+        //         // Error retrieving data
+        //         console.log(error.message);
+        //     }
+        // };
+        // console.log(saveUserId);
+
+        fetch("http://10.160.4.49:8822/Login", {
             "method": "POST",
             headers: {
                 "Accept": "application/json",
@@ -48,38 +57,63 @@ export default class Login extends Component {
             },
             body: JSON.stringify({
                 "userId": this.state.email,
-                "password": this.state.password
+                "password": g
             })
+
+
         })
             .then((response) => response.json())
             .then((responseJson) => {
-                // if (!EMAIL_REGEX.test(this.state.email)) {
-                //     Alert.alert('Dữ liệu lỗi', 'Email nhập vào không đúng định dạng!');
-                //     return;
-                // }
-               
-                if(responseJson.result == 1){  
-                    // AsyncStorage.setItem('user',responseJson.user)
+                console.log(responseJson);
+                console.log(responseJson.result);
 
-                    this.props.navigation.navigate('TestABCD');
+                if (responseJson.result == 1) {
+                  
+                  
+
+                    const sessionID = responseJson.Data.sessionCode;
                    
-                    
-                }else{
-                    alert("sai password")
+                    AsyncStorage.setItem('sessionID', sessionID);
+
+                    return this.props.navigation.navigate('TestABCD');
+
+
+
+                } else {
+                    Alert.alert("Xin vui lòng nhập lại đúng password hoặc email")
+
                 }
-              
+
+
 
             })
-            
+
             .catch(
                 (err) => {
                     console.log(err);
                 })
-      
+
     }
-    // componentDidMount() {
-    //     this._loadInitialState().done();
-    // }
+
+    encryptFun(data) {
+        var key = CryptoJS.enc.Latin1.parse('99XuLyN0@OCB2018');
+        var iv = CryptoJS.enc.Latin1.parse('13579abc@EFG2468');
+        var pass = CryptoJS.AES.encrypt(
+            data,
+            key,
+            {
+                iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.ZeroPadding
+            });
+        return pass;
+        // alert( encrypted);
+        // var decrypted = CryptoJS.AES.decrypt(encrypted,key,{iv:iv,padding:CryptoJS.pad.ZeroPadding});
+        // console.log('decrypted: '+decrypted.toString(CryptoJS.enc.Utf8));
+    }
+
+
+    componentDidMount() {
+        this.encryptFun();
+    }
     // _loadInitialState = async () => {
     //     var value = await AsyncStorage.getItem('email');
     //     if (value !== null) {
@@ -124,7 +158,21 @@ export default class Login extends Component {
                             onSubmitEditing={this._signIn}
                             placeholderTextColor="#05713a"
                         />
-                        <TouchableOpacity style={styles.submit} onPress={this._signIn}>
+                        <TouchableOpacity style={styles.submit} onPress={() => {
+                            this._signIn()
+                            if (this.state.password.length == 0 && this.state.email.length == 0) {
+                                Alert.alert("Vui lòng nhập email và password")
+                            }
+                            if (this.state.password.length == 0 && this.state.email.length != 0) {
+                                Alert.alert("Xin vui lòng nhập password ")
+
+                            }
+                            if (this.state.email.length == 0 && this.state.password.length != 0) {
+                                Alert.alert("Xin vui lòng nhập email")
+                            }
+
+
+                        }}>
                             <Text style={styles.submitText}>ĐĂNG NHẬP</Text>
                             {this.state.loading && <ActivityIndicator style={{ marginLeft: 5 }} color="#fff" />}
                         </TouchableOpacity>
