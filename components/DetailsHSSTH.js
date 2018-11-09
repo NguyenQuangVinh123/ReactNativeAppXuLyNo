@@ -54,13 +54,11 @@ export default class DetailsHSSTH extends Component {
                 maximumZoomScale={3}
                 minimumZoomScale={0.2}
                 keyboardDismissMode='on-drag'
-                contentContainerStyle={{ marginTop: 10 }}
+                
 
             >
                 <View style={styles.container}>
-                    <View style={styles.header}>
-                        <Header />
-                    </View>
+                    
                     <View style={styles.tab}>
 
                         <Button style={styles.tab1}
@@ -184,19 +182,22 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: 'white',
         backgroundColor: '#002411',
-        padding: 10,
+        
+        padding: Platform.OS === "ios" ? 10 : 11.5
     },
-
+    
     tab2: {
         fontSize: 12,
         color: 'white',
         backgroundColor: '#002411',
-        padding: 10,
+        padding: Platform.OS === "ios" ? 10 : 11.5
+
     },
     tab3: {
         fontSize: 12,
         color: 'white',
         backgroundColor: '#002411',
-        padding: 10,
+        padding: Platform.OS === "ios" ? 10 : 11.5
+
     },
 });

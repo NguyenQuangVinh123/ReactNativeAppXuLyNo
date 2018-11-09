@@ -12,10 +12,34 @@ class FlatListItem_HSSTH extends Component {
     constructor(props) {
         super(props);
         this.state = ({
-            ListWorkFromServer: []
+            ListWorkFromServer: [],
+            // refreshing : false ,
         });
 
     }
+    // componentDidMount() {
+    //     this.props.parentFlatList.refreshDataFromServer();
+    // }
+    // onRefresh = () => {
+    //     this.refreshDataFromServer();
+
+    // }
+
+    // refreshDataFromServer = () => {
+    //     this.setState({ refreshing: true });
+    //     getListCongViec_BACKLOG().then((works) => {
+            
+    //         this.setState({ ListWorkFromServer: works });
+            
+    //         this.setState({ refreshing: false });
+
+    //     }).catch((error) => {
+
+    //         this.setState({ ListWorkFromServer: [] });
+    //         this.setState({ refreshing: false });
+
+    //     });
+    // }
     componentWillMount(){
         this.getUserId()
     }
@@ -54,6 +78,7 @@ class FlatListItem_HSSTH extends Component {
                                 current_balance : this.props.item.CURRENT_BALANCE,
                                 current_pr : this.props.item.CURRENT_PR,
                                 loan_item_id : this.props.item.LOAN_ITEM_ID,
+                                parent: this.props.parentFlatList,
                             })}><Text style={{ color: "white" }}>Xem</Text></TouchableOpacity>
 
                         </View>
@@ -74,7 +99,7 @@ class FlatListItem_HSSTH extends Component {
 }
 
 
-export default class HSTHTN extends Component {
+export default class HSTD extends Component {
     // static navigationOptions = ({navigation})=>{
     //     const { params = {}} = navigation.state;
     //     let tabBarLabel = 'HSTHTN';
@@ -83,10 +108,18 @@ export default class HSTHTN extends Component {
     constructor(props) {
         super(props);
         this.state = ({
-            ListWorkFromServer: []
+            ListWorkFromServer: [],
+            // refreshing : false,
+            // deleteRowKey : null
+
         });
 
     }
+    // refreshrefreshFlatList = (deleteKey) =>{
+    //     this.setState((preprevState) =>{
+    //         deleteRowKey = deleteKey
+    //     })
+    // }
 
     componentDidMount() {
         this.refreshDataFromServer();
@@ -121,9 +154,9 @@ export default class HSTHTN extends Component {
         
         return (
             <View style={styles.container}>
-                <View style={styles.header}>
+                {/* <View style={styles.header}>
                     <Header />
-                </View>
+                </View> */}
                 <View style={styles.tab}>
                     <Button style={styles.tab1}
                         onPress={() => {
@@ -144,7 +177,7 @@ export default class HSTHTN extends Component {
 
                 <View style={styles.content}>
                     <FlatList
-                        ref={"flatList"}
+                        // ref={"flatList"}
                         data={this.state.ListWorkFromServer}
                         // data = {flatListData}
                         renderItem={({ item, index }) => {
@@ -182,6 +215,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     firstrowtext: {
+        paddingBottom: 20,
+        fontWeight: 'bold',
         color: 'green',
         fontSize: 16,
     },
@@ -212,11 +247,11 @@ const styles = StyleSheet.create({
     header: {
         justifyContent: 'center',
         alignItems: 'center',
-        flex: 10,
+        flex:  Platform.OS === "ios" ? 10 : 15,
         backgroundColor: "#008b43",
     },
     tab: {
-        flex: 5,
+        flex: Platform.OS === "ios" ? 5 : 7,
         flexDirection: 'row',
         justifyContent: 'space-between',
         fontWeight: '600',
@@ -230,7 +265,7 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: 'white',
         backgroundColor: '#004b24',
-        padding: 10,
+        padding: Platform.OS === "ios" ? 10 : 11.5
     },
     logo: {
         position: 'absolute',
@@ -243,12 +278,12 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: 'white',
         backgroundColor: '#002411',
-        padding: 10,
+        padding: Platform.OS === "ios" ? 10 : 11.5
     },
     tab3: {
         fontSize: 12,
         color: 'white',
         backgroundColor: '#004b24',
-        padding: 10,
+        padding: Platform.OS === "ios" ? 10 : 11.5
     },
 });

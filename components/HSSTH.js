@@ -74,7 +74,7 @@ class FlatListItem_HSSTH extends Component {
 }
 
 
-export default class HSTHTN extends Component {
+export default class HSSTH extends Component {
     // static navigationOptions = ({navigation})=>{
     //     const { params = {}} = navigation.state;
     //     let tabBarLabel = 'HSTHTN';
@@ -83,7 +83,8 @@ export default class HSTHTN extends Component {
     constructor(props) {
         super(props);
         this.state = ({
-            ListWorkFromServer: []
+            ListWorkFromServer: [],
+            refreshing : false,
         });
 
     }
@@ -121,9 +122,9 @@ export default class HSTHTN extends Component {
         
         return (
             <View style={styles.container}>
-                <View style={styles.header}>
+                {/* <View style={styles.header}>
                     <Header />
-                </View>
+                </View> */}
                 <View style={styles.tab}>
                     <Button style={styles.tab1}
                         onPress={() => {
@@ -183,6 +184,8 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     firstrowtext: {
+        paddingBottom: 20,
+        fontWeight: 'bold',
         color: 'green',
         fontSize: 16,
     },
@@ -222,21 +225,20 @@ const styles = StyleSheet.create({
     header: {
         justifyContent: 'center',
         alignItems: 'center',
-        flex: 10,
+        flex:  Platform.OS === "ios" ? 10 : 15,
         backgroundColor: "#008b43",
     },
     tab: {
-        flex: 5,
+        flex: Platform.OS === "ios" ? 5 : 7,
         flexDirection: 'row',
         justifyContent: 'space-between',
         fontWeight: '600',
-
     },
     tab1: {
         fontSize: 12,
         color: 'white',
         backgroundColor: '#004b24',
-        padding: 10,
+        padding: Platform.OS === "ios" ? 10 : 11.5
     },
     logo: {
         position: 'absolute',
@@ -249,12 +251,12 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: 'white',
         backgroundColor: '#004b24',
-        padding: 10,
+        padding: Platform.OS === "ios" ? 10 : 11.5
     },
     tab3: {
         fontSize: 12,
         color: 'white',
         backgroundColor: '#002411',
-        padding: 10,
+        padding: Platform.OS === "ios" ? 10 : 11.5
     },
 });

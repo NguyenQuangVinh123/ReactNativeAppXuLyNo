@@ -11,10 +11,9 @@ import { name as appName } from './app.json';
 import { StackNavigator, TabNavigator, createStackNavigator, createTabNavigator, TabBarBottom, createBottomTabNavigator, createMaterialTopTabNavigator } from 'react-navigation';
 import Details from './components/Details'
 import UsersMap from './components/UsersMap'
-import { HSTHTNScreen, HSTDScreen, HSSTHScreen, DetailsScreen,DetailsHSSTHScreen } from './screenNames';
-import TestABCD from './components/TestABCD';
-import TestFlatList from './components/TestFlatList';
-
+import { HSTHTNScreen, HSTDScreen, HSSTHScreen, DetailsScreen,DetailsHSSTHScreen,LoginScreen } from './screenNames';
+// import TestABCD from './components/TestABCD';
+import Login from './components/login/Login'
 const HSTHTNStack = createStackNavigator({
     HSTHTNScreen: {
         screen: HSTHTN, navigationOptions: {
@@ -26,7 +25,20 @@ const HSTHTNStack = createStackNavigator({
             header: null
         }
     },
-});
+ 
+    // maninScreen :{
+    //     screen: Main, navigationOptions: {
+    //         header: null
+    //     } 
+    // }
+    
+    
+}, {
+    initialRouteName: 'HSTHTNScreen',
+  });
+//   const LoginStack  = createStackNavigator({
+
+//   });
 const HSTDStack = createStackNavigator({
     HSTDScreen: {
         screen: HSTD, navigationOptions: {
@@ -38,6 +50,7 @@ const HSTDStack = createStackNavigator({
             header: null
         }
     },
+   
 });
 const HSSTHStack = createStackNavigator({
     HSSTHScreen: {
@@ -153,4 +166,5 @@ class Main extends Component {
         return maninScreen
     }
 }
+export default Main;
 AppRegistry.registerComponent(appName, () => Main);

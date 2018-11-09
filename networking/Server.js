@@ -344,7 +344,7 @@ async function PostImage(params) {
         });
         
         let responseJson = await response.json();
-        console.log(responseJson.result)
+        
         return responseJson.result; // "result" là trường check Json
     } catch (err) {
         console.log(`Error is :${error}`);

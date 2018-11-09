@@ -18,7 +18,9 @@ import { HSTHTNScreen } from "../screenNames";
 import Header from "./Header";
 import flatListData from "../data/flatListData";
 import { PostWork, PostImage } from "../networking/Server";
-import { refreshDataFromServer } from "./HSTHTN";
+// import { refreshDataFromServer } from "./HSTHTN";
+// import  {refreshDataFromServer}  from "./HSTD";
+import HSTD from './HSTD';
 import FetchLocation from "./FetchLocation";
 import ImagePicker from "react-native-image-picker";
 import UsersMap from "./UsersMap";
@@ -65,12 +67,7 @@ export default class Details_HSTHTN extends Component {
       uri: require("../image/step1.png")
     };
   }
-  // componentDidMount(){
-  //     this.refreshDataFromServer()
-  // }
-  // getListCongViec(){
 
-  // }
   getUserLocationHandler = () => {
     // navigator.geolocation.getCurrentPosition(position =>{
     //   console.log(position);
@@ -163,10 +160,15 @@ export default class Details_HSTHTN extends Component {
       isVisible: true
     });
   };
-  changeLogo() {
-    console.log("state changed!");
+  changeLogoStep2() {
+    // console.log("state changed!");
     this.setState({
-      uri: require("../image/step2.png")
+      uri: require("../image/step2.jpg")
+    });
+  }
+  changeLogoStep3(){
+    this.setState({
+      uri: require("../image/step3.jpg")
     });
   }
 
@@ -209,6 +211,7 @@ export default class Details_HSTHTN extends Component {
     let number_current_balance = Number(current_balance).toLocaleString();
     let number_current_pr = Number(current_pr).toLocaleString();
     let loan_item_id = navigation.getParam("loan_item_id");
+    let parent = navigation.getParam("parent");
     AsyncStorage.setItem("loanItemId", loan_item_id);
     let array_date = this.state.choosendate.split("/");
     let date_format = array_date[2] + array_date[1] + array_date[0];
@@ -222,9 +225,7 @@ export default class Details_HSTHTN extends Component {
         
       >
         <View style={styles.container}>
-          <View style={styles.header}>
-            <Header />
-          </View>
+         
           <View style={styles.tab}>
             <Button style={styles.tab1} disabled={true}>
               HS TH TRONG NGÀY
@@ -423,8 +424,7 @@ export default class Details_HSTHTN extends Component {
                   marginBottom: 20
                 }}
               />
-              {/* <TouchableHighlight onPress={() => this.changeLogo()} style={{ marginTop: 50, marginBottom: 50 }}>
-                            </TouchableHighlight> */}
+            
               <View
                 style={{
                   justifyContent: "center",
@@ -451,19 +451,18 @@ export default class Details_HSTHTN extends Component {
                       }
                       // console.log(img1);
                       // console.log(typeof b);
-
-                      if (b.length == 0 ) {
-                        alert("Bạn vui lòng chụp hình tài sản");
-                        return;
-                      }
-                      if (c.length == 0 ) {
-                        alert("Bạn vui lòng chụp hình tài liệu");
-                        return;
-                      }
                       if (this.state.choosendate.length == 0) {
                         alert("Bạn vui lòng chọn ngày hẹn");
                         return;
                       }
+                      if (b.length == 0 && c.length == 0 ) {
+                        alert("Bạn vui lòng chụp hình tài sản hoặc hình tài liệu");
+                        return;
+                        
+                      }
+                     
+                      
+                      
                       if (this.state.userLocation == null) {
                         alert("Bạn vui lòng chọn vị trí tài sản");
                         return;
@@ -475,63 +474,79 @@ export default class Details_HSTHTN extends Component {
                         longitude: this.state.userLocation.longitude,
                         paymentDate: date_format
                       };
-                      if(this.type_upload){
+                      
                         PostWork(result1).then(result => {
                           if (result == "1") {
-                              Alert.alert("Upload xong doc");
+                              // Alert.alert("Upload xong doc");
                               console.log("finish step 1")
-                              this.type_upload = false;
-                              console.log(this.type_upload);
-                              this.changeLogo()
+                              
+                              this.changeLogoStep2()
+                              if(b.length == 0 && c.length != 0){
+                                this.changeLogoStep3()
+                              Alert.alert("Bạn đã upload hình ảnh thành công")
+                              parent.refreshDataFromServer();
+                              this.props.navigation.goBack();
+                              }else{
+                                for (var i = 0; i < img.length; i++) {                        
+                                  var source_picture = img[i].props.source.uri;
+                                  var a_split = source_picture.split(",");
+                                  var params_picture = {
+                                    fileType: "IMG",
+                                    imageFile: a_split[1]
+                                  };
+          
+                                  PostImage(params_picture).then(result => {
+                                    if (result == "1") {
+                                      // this.type_upload == true
+                                      console.log("finish step 2");
+                                    }
+                                  });                                                 
+                               }
+                              }
+                           
+                             if(c.length == 0 && b.length != 0){
+                              this.changeLogoStep3()
+                              Alert.alert("Bạn đã upload hình ảnh thành công")
+                              parent.refreshDataFromServer();
+                              this.props.navigation.goBack();
+
+                             }else {
+                              for (var i = 0; i < img1.length; i++) {
+                             
+                                var source_picture1 = img1[i].props.source.uri;
+                                var b_split = source_picture1.split(",");
+                                var params_picture1 = {
+                                  fileType: "DOC",
+                                  imageFile: b_split[1]
+                                };
+        
+                                PostImage(params_picture1).then(result => {
+                                  if (result == "1") {
+                                    // this.type_upload == false
+                                    this.changeLogoStep3()
+                                    Alert.alert("Bạn đã upload hình ảnh thành công")
+      
+                                   
+                                    // setTimeout(() =>{ this.props.navigation.goBack() 
+                                      
+                                    // },2500);
+                                    parent.refreshDataFromServer();
+                                    this.props.navigation.goBack();
+                                    
+                                    
+                                  }
+                                });
+                              }
+                             }   
+                           
                           }
                         });
-                      }else{
-                        
-                        for (var i = 0; i < img.length; i++) {
-                         
-                            var source_picture = img[i].props.source.uri;
-                            var a_split = source_picture.split(",");
-                            var params_picture = {
-                              fileType: "IMG",
-                              imageFile: a_split[1]
-                            };
-    
-                            PostImage(params_picture).then(result => {
-                              if (result == "1") {
-                                // this.type_upload == true
-                                console.log("finish step 2");
-                                
-
-                              }
-                            });
-                          
+                                       
                        
-                         }
-
-                        for (var i = 0; i < img1.length; i++) {
-                         
-                          var source_picture1 = img1[i].props.source.uri;
-                          var b_split = source_picture1.split(",");
-                          var params_picture1 = {
-                            fileType: "DOC",
-                            imageFile: b_split[1]
-                          };
-  
-                          PostImage(params_picture1).then(result => {
-                            if (result == "1") {
-                              // this.type_upload == false
-                              Alert.alert("Bạn đã upload hình ảnh thành công")
-                              setTimeout(() =>{ this.props.navigation.goBack() },2000);
-                              // this.props.navigation.goBack();
-                            }
-                          });
-                        }
                       
                       }
-                     
-
                       
-                    }}
+                    }
                   >
                     <Text
                       style={{ fontSize: 22, color: "#fff", fontWeight: "600" }}
@@ -626,19 +641,19 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "white",
     backgroundColor: "#002411",
-    padding: 10
+    padding: Platform.OS === "ios" ? 10 : 11.5
   },
 
   tab2: {
     fontSize: 12,
     color: "white",
     backgroundColor: "#002411",
-    padding: 10
+    padding: Platform.OS === "ios" ? 10 : 11.5
   },
   tab3: {
     fontSize: 12,
     color: "white",
     backgroundColor: "#002411",
-    padding: 10
+    padding: Platform.OS === "ios" ? 10 : 11.5
   }
 });

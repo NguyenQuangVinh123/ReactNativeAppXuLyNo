@@ -1,21 +1,26 @@
 import React,{Component} from 'react';
 import { Platform, StyleSheet, Text, View, Image, TouchableOpacity, FlatList, RefreshControl, SafeAreaView,AsyncStorage } from 'react-native';
 import Button from 'react-native-button';
-import { HSTDScreen, HSSTHScreen, DetailsScreen } from '../screenNames';
+import { HSTDScreen, HSSTHScreen, DetailsScreen, HSTHTNScreen, LoginScreen } from '../screenNames';
 import Header from './Header';
 import flatListData from '../data/flatListData';
-import TabNavigatorTestABC from '../index';
 import TestABCD from './TestABCD';
 import { TabBar } from '../index'
+import { StackActions, NavigationActions } from 'react-navigation';
 import { getListCongViec_Current } from '../networking/Server';
+import Login from './login/Login';
+import { TabNavigatorTest } from '../index';
+
 class FlatListItem_HSTHTN extends Component {
     constructor(props) {
         super(props);
         this.state = ({
+            // refreshing : false,
             ListWorkFromServer: []
         });
 
     }
+    
     componentWillMount(){
         this.getUserId()
     }
@@ -83,19 +88,29 @@ export default class HSTHTN extends Component {
     constructor(props) {
         super(props);
         this.state = ({
-            ListWorkFromServer: []
+            // refreshing : false,
+            ListWorkFromServer: [],
+            loggedIn: true,
+            foo : ""
         });
 
     }
 
     componentDidMount() {
+        const check_userID =  AsyncStorage.getItem('userId');
+        const check_session_ID =  AsyncStorage.getItem('sessionID');
+
+        if(check_userID == null && check_session_ID == null) {
+            this.props.navigation.navigate(LoginScreen);
+        }
         this.refreshDataFromServer();
+        // this.props.navigation.state.params.refresh()
     }
     onRefresh = () => {
         this.refreshDataFromServer();
 
     }
-
+    
     refreshDataFromServer = () => {
         this.setState({ refreshing: true });
         getListCongViec_Current().then((works) => {
@@ -111,19 +126,34 @@ export default class HSTHTN extends Component {
 
         });
     }
+    signout(){
+        AsyncStorage.clear(); // to clear the token 
+        this.setState({loggedIn:true});
+     }
+    //  goBack() {
+    //     const { navigation } = this.props;
+    //     navigation.goBack();
+    //     navigation.state.params.onSelect({ selected: true });
+    //   }
 
     render() {
-        const { navigation } = this.props;
+        // const { navigation } = this.props;
         // let dataScence = {
         //     name: "Star Wars",
         //     year : 1997
         // }
-        
+        const { navigation } = this.props;
+        // const reloadLastScreen = navigation.getParam('onBack');
+        // reloadLastScreen();
+        // const navigaton = navigation.state.params.onNavigateBack(this.state.foo)
         return (
+              
+             
             <View style={styles.container}>
-                <View style={styles.header}>
-                    <Header />
-                </View>
+             {/* <TabNavigatorTest 
+                    
+                    />  */}
+               
                 <View style={styles.tab}>
 
                     <Button style={styles.tab1}
@@ -145,6 +175,7 @@ export default class HSTHTN extends Component {
                     {/* <TabNavigatorTestABC /> */}
 
                 </View>
+               
                 <View style={styles.content}>
                     <FlatList
                         ref={"flatList"}
@@ -217,11 +248,11 @@ const styles = StyleSheet.create({
     header: {
         justifyContent: 'center',
         alignItems: 'center',
-        flex: 10,
+        flex:  Platform.OS === "ios" ? 10 : 15,
         backgroundColor: "#008b43",
     },
     tab: {
-        flex: 5,
+        flex: Platform.OS === "ios" ? 5 : 7,
         flexDirection: 'row',
         justifyContent: 'space-between',
         fontWeight: '600',
@@ -235,10 +266,8 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: 'white',
         backgroundColor: '#002411',
-        paddingTop: 10,
-        paddingBottom: 10,
-        paddingRight: 10,
-        paddingLeft: 10
+        
+        padding: Platform.OS === "ios" ? 10 : 11.5
     },
     logo: {
         position: 'absolute',
@@ -251,18 +280,14 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: 'white',
         backgroundColor: '#004b24',
-        paddingTop: 10,
-        paddingBottom: 10,
-        paddingRight: 10,
-        paddingLeft: 10
+        padding: Platform.OS === "ios" ? 10 : 11.5
+
     },
     tab3: {
         fontSize: 12,
         color: 'white',
         backgroundColor: '#004b24',
-        paddingTop: 10,
-        paddingBottom: 10,
-        paddingRight: 10,
-        paddingLeft: 10
+        padding: Platform.OS === "ios" ? 10 : 11.5
+
     },
 });
