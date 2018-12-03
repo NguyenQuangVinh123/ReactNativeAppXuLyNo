@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import {
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  TouchableOpacity,
-  AsyncStorage,
-  ScrollView,
-  TouchableHighlight,
-  TextInput,
-  Keyboard
+    Platform,
+    StyleSheet,
+    Text,
+    View,
+    Image,
+    TouchableOpacity,
+    AsyncStorage,
+    ScrollView,
+    TouchableHighlight,
+    TextInput,
+    Keyboard
 } from "react-native";
 import Button from "react-native-button";
 import { HSTHTNScreen } from "../screenNames";
@@ -27,8 +27,8 @@ import NumberFormat from "react-number-format";
 
 
 export default class DetailsHSSTH extends Component {
-    
-   
+
+
 
     back = () => {
         this.props.navigation.goBack();
@@ -37,7 +37,7 @@ export default class DetailsHSSTH extends Component {
 
     render() {
 
-        
+
 
         const { navigation } = this.props;
         const cif = navigation.getParam('cif');
@@ -54,11 +54,11 @@ export default class DetailsHSSTH extends Component {
                 maximumZoomScale={3}
                 minimumZoomScale={0.2}
                 keyboardDismissMode='on-drag'
-                
+
 
             >
                 <View style={styles.container}>
-                    
+
                     <View style={styles.tab}>
 
                         <Button style={styles.tab1}
@@ -116,7 +116,7 @@ export default class DetailsHSSTH extends Component {
                             <Text style={styles.titleContent}>Tổng dư nợ:<Text style={{ fontWeight: "normal" }}> {number_current_balance} VNĐ</Text></Text>
                             <Text style={styles.titleContent}>Tổng gốc quá hạn:<Text style={{ fontWeight: "normal" }}> {number_current_pr} VNĐ</Text></Text>
                         </View>
-                       
+
                     </View>
 
 
@@ -129,11 +129,11 @@ export default class DetailsHSSTH extends Component {
 
 const styles = StyleSheet.create({
 
-   
+
     titleContent: {
         color: "black", fontWeight: "bold"
     },
-    
+
     cif: {
         paddingTop: 20,
         paddingBottom: 10,
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     content: {
         flexDirection: "column",
     },
-    
+
     container: {
         flex: 1,
         backgroundColor: 'white',
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
 
 
     bodycontent: {
-        
+
         paddingLeft: 10,
         paddingRight: 20,
     },
@@ -182,22 +182,28 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: 'white',
         backgroundColor: '#002411',
-        
-        padding: Platform.OS === "ios" ? 10 : 11.5
-    },
-    
+
+        paddingLeft: Platform.OS === "ios" ? 10 : 20,
+        paddingRight: Platform.OS === "ios" ? 10 : 20,
+        paddingTop : Platform.OS === "ios" ? 12 : 13,
+        paddingBottom : Platform.OS === "ios" ? 12 : 13,      },
+
     tab2: {
         fontSize: 12,
         color: 'white',
         backgroundColor: '#002411',
-        padding: Platform.OS === "ios" ? 10 : 11.5
-
+        paddingLeft: Platform.OS === "ios" ? 10 : 20,
+        paddingRight: Platform.OS === "ios" ? 10 : 20,
+        paddingTop : Platform.OS === "ios" ? 12 : 13,
+        paddingBottom : Platform.OS === "ios" ? 12 : 13,  
     },
     tab3: {
         fontSize: 12,
         color: 'white',
         backgroundColor: '#002411',
-        padding: Platform.OS === "ios" ? 10 : 11.5
-
+        paddingLeft: Platform.OS === "ios" ? 10 : 20,
+        paddingRight: Platform.OS === "ios" ? 10 : 20,
+        paddingTop : Platform.OS === "ios" ? 12 : 13,
+        paddingBottom : Platform.OS === "ios" ? 12 : 13,  
     },
 });

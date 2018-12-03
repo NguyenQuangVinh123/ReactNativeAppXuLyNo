@@ -245,30 +245,6 @@ const styles = StyleSheet.create({
         width: 30,
         height: 30
     },
-    header: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        flex:  Platform.OS === "ios" ? 10 : 15,
-        backgroundColor: "#008b43",
-    },
-    tab: {
-        flex: Platform.OS === "ios" ? 5 : 7,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        fontWeight: '600',
-    },
-    content: {
-
-
-        flex: 85,
-    },
-    tab1: {
-        fontSize: 12,
-        color: 'white',
-        backgroundColor: '#002411',
-        
-        padding: Platform.OS === "ios" ? 10 : 11.5
-    },
     logo: {
         position: 'absolute',
         width: 200,
@@ -276,18 +252,48 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
+    header: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex:  Platform.OS === "ios" ? 12 : 15,
+        backgroundColor: "#008b43",
+    },
+    tab: {
+
+        flex: Platform.OS === "ios" ? 5 : 7,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        fontWeight: '600',
+    },
+    content: {
+        flex: 85,
+    },
+    tab1: {
+
+        fontSize: 12,
+        color: 'white',
+        backgroundColor: '#002411',      
+        paddingLeft: Platform.OS === "ios" ? 10 : 20,
+        paddingRight: Platform.OS === "ios" ? 10 : 20,
+        paddingTop : Platform.OS === "ios" ? 12 : 13,
+        paddingBottom : Platform.OS === "ios" ? 12 : 13,    },
+    
     tab2: {
         fontSize: 12,
         color: 'white',
         backgroundColor: '#004b24',
-        padding: Platform.OS === "ios" ? 10 : 11.5
-
+        paddingLeft: Platform.OS === "ios" ? 10 : 20,
+        paddingRight: Platform.OS === "ios" ? 10 : 20,
+        paddingTop : Platform.OS === "ios" ? 12 : 13,
+        paddingBottom : Platform.OS === "ios" ? 12 : 13,
     },
     tab3: {
         fontSize: 12,
         color: 'white',
         backgroundColor: '#004b24',
-        padding: Platform.OS === "ios" ? 10 : 11.5
-
+        paddingLeft: Platform.OS === "ios" ? 10 : 20,
+        paddingRight: Platform.OS === "ios" ? 10 : 20,
+        paddingTop : Platform.OS === "ios" ? 12 : 13,
+        paddingBottom : Platform.OS === "ios" ? 12 : 13,
     },
 });

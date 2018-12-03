@@ -3,7 +3,9 @@ import {SafeAreaView,Platform,View,TouchableOpacity,Text,StyleSheet,Image} from 
 import { TabNavigatorTest } from '../index';
 import Button from 'react-native-button';
 import Header from './Header';
+
 export default class TestABCD extends Component {
+    
     render() {
         return (
             <View style={styles.container}>
@@ -33,7 +35,7 @@ const styles = StyleSheet.create({
         height : 50,
         resizeMode: 'contain',
         width : 200,
-        marginTop: 20,
+        marginTop: 50,
         marginBottom : 20,
     },
     header: {

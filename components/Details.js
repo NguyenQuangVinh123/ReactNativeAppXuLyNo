@@ -8,18 +8,15 @@ import {
   TouchableOpacity,
   AsyncStorage,
   ScrollView,
-  TouchableHighlight,
   TextInput,
   Keyboard,
-  Alert
+  Alert,BackHandler, DeviceEventEmitter
 } from "react-native";
 import Button from "react-native-button";
 import { HSTHTNScreen } from "../screenNames";
 import Header from "./Header";
 import flatListData from "../data/flatListData";
 import { PostWork, PostImage } from "../networking/Server";
-// import { refreshDataFromServer } from "./HSTHTN";
-// import  {refreshDataFromServer}  from "./HSTD";
 import HSTD from './HSTD';
 import FetchLocation from "./FetchLocation";
 import ImagePicker from "react-native-image-picker";
@@ -27,13 +24,19 @@ import UsersMap from "./UsersMap";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import moment from "moment";
 import NumberFormat from "react-number-format";
+import LocationServicesDialogBox from "react-native-android-location-services-dialog-box";
+
 const options = {
   title: "Chọn loaị",
 
   storageOptions: {
     skipBackup: true,
-    path: "images"
-  }
+    path: "images",
+    cameraRoll : false,
+  },
+  quality : 0.8,
+  maxWidth : 2800,
+  maxHeight : 1400,
 };
 
 const options1 = {
@@ -41,10 +44,39 @@ const options1 = {
 
   storageOptions: {
     skipBackup: true,
-    path: "images"
-  }
+    path: "images",
+    cameraRoll : false,
+  },
+  quality : 0.8,
+  maxWidth : 2800,
+  maxHeight : 1400,
+
 };
 
+LocationServicesDialogBox.checkLocationServicesIsEnabled({
+  message: "<h2 style='color: #0af13e'>Bật GPS ?</h2>App này cần sử dụng GPS:<br/><br/>Sử dụng GPS, Wi-Fi<br/><br/>",
+  ok: "YES",
+  cancel: "NO",
+  enableHighAccuracy: true, // true => GPS AND NETWORK PROVIDER, false => GPS OR NETWORK PROVIDER
+  showDialog: true, // false => Opens the Location access page directly
+  openLocationServices: true, // false => Directly catch method is called if location services are turned off
+  preventOutSideTouch: false, // true => To prevent the location services window from closing when it is clicked outside
+  preventBackClick: false, // true => To prevent the location services popup from closing when it is clicked back button
+  providerListener: false // true ==> Trigger locationProviderStatusChange listener when the location state changes
+}).then(function(success) {
+  console.log(success); // success => {alreadyEnabled: false, enabled: true, status: "enabled"}
+}).catch((error) => {
+  console.log(error.message); // error.message => "disabled"
+});
+
+BackHandler.addEventListener('hardwareBackPress', () => { //(optional) you can use it if you need it
+ //do not use this method if you are using navigation."preventBackClick: false" is already doing the same thing.
+ LocationServicesDialogBox.forceCloseDialog();
+});
+
+DeviceEventEmitter.addListener('locationProviderStatusChange', function(status) { // only trigger when "providerListener" is enabled
+  console.log(status); //  status => {enabled: false, status: "disabled"} or {enabled: true, status: "enabled"}
+});
 
 export default class Details_HSTHTN extends Component {
   constructor(props) {
@@ -52,34 +84,40 @@ export default class Details_HSTHTN extends Component {
     this.isCapture = false;
     this.isCapture1 = false;
     this.type_upload = true,
-    this.state = {
-      result: "",
-      // avatarSource: null,
-      avatarSource1: null,
-      userLocation: null,
-      currentPosition: 0,
-      avatarSource2: null,
-      isVisible: false,
-      choosendate: "",
-      test: [],
-      test1: [],
-      
-      uri: require("../image/step1.png")
-    };
+
+    // this.isDisabled = false;
+      // this.pressed = false;
+      this.state = {
+        locationEnabled: false,
+        result: "",
+        // avatarSource: null,
+        avatarSource1: null,
+        userLocation: null,
+        currentPosition: 0,
+        avatarSource2: null,
+        isVisible: false,
+        choosendate: "",
+        test: [],
+        test1: [],
+        isDisabled: false,
+        // disabled: false,
+        uri: require("../image/step1.png")
+      };
   }
 
   getUserLocationHandler = () => {
     // navigator.geolocation.getCurrentPosition(position =>{
     //   console.log(position);
     // }, err => console.log(err));
+    this.onEnableLocationPress
     navigator.geolocation.getCurrentPosition(
       position => {
         this.setState({
           userLocation: {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421
+            latitudeDelta: 0.01,
+            longitudeDelta: 0.01
           }
         });
         // fetch('', {
@@ -95,7 +133,28 @@ export default class Details_HSTHTN extends Component {
       err => console.log(err)
     );
   };
+  
+  componentWillUnmount() {
+    // used only when "providerListener" is enabled
+    LocationServicesDialogBox.stopListener(); // Stop the "locationProviderStatusChange" listener
+  }
+  
+  // componentDidMount() {
+  //   LocationSwitch.isLocationEnabled(
+  //     () => {
+  //       Alert.alert('Location is enabled');
+  //       this.setState({ locationEnabled: true });
+  //     },
+  //     () => { Alert.alert('Location is disabled'); },
+  //   );
+  // }
 
+  // onEnableLocationPress() {
+  //   LocationSwitch.enableLocationService(1000, true,
+  //     () => { this.setState({ locationEnabled: true }); },
+  //     () => { this.setState({ locationEnabled: false }); },
+  //   );
+  // }
   imagepickershow = () => {
     ImagePicker.launchCamera(options, response => {
       if (response.didCancel) {
@@ -105,14 +164,15 @@ export default class Details_HSTHTN extends Component {
       } else if (response.customButton) {
         console.log("User tapped custom button: ", response.customButton);
       } else {
-        // const source = { uri: response.uri };
+        const source = { uri: response.uri };
 
         // You can also display the image using data:
-        const source = { uri: "data:image/jpeg;base64," + response.data };
+        // const source = { uri: "data:image/jpeg;base64," + response.data };
         this.isCapture = true;
         this.setState({
           avatarSource1: source
         });
+        console.log(source);
       }
     });
   };
@@ -160,13 +220,19 @@ export default class Details_HSTHTN extends Component {
       isVisible: true
     });
   };
+  onPressBox(){
+    console.log("ok")
+    this.setState({
+      isDisabled: true,
+    });
+  }
   changeLogoStep2() {
     // console.log("state changed!");
     this.setState({
       uri: require("../image/step2.jpg")
     });
   }
-  changeLogoStep3(){
+  changeLogoStep3() {
     this.setState({
       uri: require("../image/step3.jpg")
     });
@@ -185,7 +251,7 @@ export default class Details_HSTHTN extends Component {
       this.isCapture = false;
     }
     let img = this.state.avatarSource1 == null ? null : b;
-    var array_image = b.forEach(function(e) {});
+    var array_image = b.forEach(function (e) { });
 
     let c = this.state.test1;
     if (this.isCapture1) {
@@ -200,7 +266,8 @@ export default class Details_HSTHTN extends Component {
     }
 
     let img1 = this.state.avatarSource2 == null ? null : c;
-
+    const { isDisabled } = this.state
+    let enabled = 1;
     const { navigation } = this.props;
     const cif = navigation.getParam("cif");
     const name = navigation.getParam("cust_name");
@@ -222,10 +289,10 @@ export default class Details_HSTHTN extends Component {
         maximumZoomScale={3}
         minimumZoomScale={0.2}
         keyboardDismissMode="on-drag"
-        
+
       >
         <View style={styles.container}>
-         
+
           <View style={styles.tab}>
             <Button style={styles.tab1} disabled={true}>
               HS TH TRONG NGÀY
@@ -345,7 +412,7 @@ export default class Details_HSTHTN extends Component {
               />
 
               <View style={styles.calendartt}>
-                <Text>Ngày hẹn TT: {this.state.choosendate}</Text>
+                <Text>Ngày hẹn thanh toán: {this.state.choosendate}</Text>
                 <TouchableOpacity
                   onPress={this.calendarchoose}
                   style={{ paddingLeft: 15 }}
@@ -373,7 +440,20 @@ export default class Details_HSTHTN extends Component {
                     justifyContent: "space-around",
                     alignItems: "center"
                   }}
-                  onPress={this.imagepickershow.bind(this)}
+                  onPress={() =>{
+                    if(b.length >5){
+                      alert("Chỉ được chụp 6 tấm hình tài sản ");
+                      
+                    }else{
+                      this.imagepickershow()
+                      
+                    }
+                   
+                    }
+                    
+                    
+                    }
+                    // onPress= {this.imagepickershow.bind(this)}
                 >
                   <Image
                     source={require("../image/camrera1.png")}
@@ -424,7 +504,7 @@ export default class Details_HSTHTN extends Component {
                   marginBottom: 20
                 }}
               />
-            
+
               <View
                 style={{
                   justifyContent: "center",
@@ -444,30 +524,40 @@ export default class Details_HSTHTN extends Component {
                   }}
                 >
                   <TouchableOpacity
+                    // style={ isDisabled?  styles.disabled:styles.enabled} 
+                    disabled={isDisabled}
+                    // disabled={this.state.disabled}
+                    
                     onPress={() => {
+
                       if (this.state.result.length == 0) {
                         alert("Bạn phải điền thông tin kết quả thực hiện");
                         return;
                       }
-                      // console.log(img1);
-                      // console.log(typeof b);
+                      // console.log(typeof )
                       if (this.state.choosendate.length == 0) {
-                        alert("Bạn vui lòng chọn ngày hẹn");
-                        return;
+                        date_format = '';                        
                       }
-                      if (b.length == 0 && c.length == 0 ) {
+                      if (b.length == 0 && c.length == 0) {
                         alert("Bạn vui lòng chụp hình tài sản hoặc hình tài liệu");
                         return;
-                        
+
                       }
-                     
-                      
-                      
+                      // if(date_format == '' || date_format == null){
+                      //   date_format = '';
+                      // }
+                      // if (b.length != 0 || c.length != 0) {
+                        
+                      //   return;
+
+                      // }
+
+
                       if (this.state.userLocation == null) {
                         alert("Bạn vui lòng chọn vị trí tài sản");
                         return;
                       }
-                      //
+                      
                       const result1 = {
                         result: this.state.result,
                         latitude: this.state.userLocation.latitude,
@@ -475,81 +565,134 @@ export default class Details_HSTHTN extends Component {
                         paymentDate: date_format
                       };
                       
-                        PostWork(result1).then(result => {
-                          if (result == "1") {
-                              // Alert.alert("Upload xong doc");
-                              console.log("finish step 1")
-                              
-                              this.changeLogoStep2()
-                              if(b.length == 0 && c.length != 0){
-                                this.changeLogoStep3()
-                              Alert.alert("Bạn đã upload hình ảnh thành công")
-                              parent.refreshDataFromServer();
-                              this.props.navigation.goBack();
-                              }else{
-                                for (var i = 0; i < img.length; i++) {                        
-                                  var source_picture = img[i].props.source.uri;
-                                  var a_split = source_picture.split(",");
-                                  var params_picture = {
-                                    fileType: "IMG",
-                                    imageFile: a_split[1]
-                                  };
-          
-                                  PostImage(params_picture).then(result => {
-                                    if (result == "1") {
-                                      // this.type_upload == true
-                                      console.log("finish step 2");
-                                    }
-                                  });                                                 
-                               }
-                              }
-                           
-                             if(c.length == 0 && b.length != 0){
-                              this.changeLogoStep3()
-                              Alert.alert("Bạn đã upload hình ảnh thành công")
-                              parent.refreshDataFromServer();
-                              this.props.navigation.goBack();
+                      PostWork(result1).then(result => {
+                        if (result == "1") {
+                          // Alert.alert("Upload xong doc");
 
-                             }else {
-                              for (var i = 0; i < img1.length; i++) {
-                             
-                                var source_picture1 = img1[i].props.source.uri;
-                                var b_split = source_picture1.split(",");
-                                var params_picture1 = {
-                                  fileType: "DOC",
-                                  imageFile: b_split[1]
-                                };
-        
-                                PostImage(params_picture1).then(result => {
-                                  if (result == "1") {
-                                    // this.type_upload == false
-                                    this.changeLogoStep3()
-                                    Alert.alert("Bạn đã upload hình ảnh thành công")
-      
-                                   
-                                    // setTimeout(() =>{ this.props.navigation.goBack() 
-                                      
-                                    // },2500);
-                                    parent.refreshDataFromServer();
-                                    this.props.navigation.goBack();
-                                    
-                                    
-                                  }
-                                });
-                              }
-                             }   
-                           
+                          this.changeLogoStep2()
+                          console.log(date_format);
+                          console.log("finish step 1");
+                          if (b.length != 0 && c.length == 0) {
+                            console.log("chuỗi c rỗng")
+                            for (var i = 0; i < img.length; i++) {
+                              var source_picture = img[i].props.source.uri;
+                              var a_split = source_picture.split(",");
+                              var params_picture = {
+                                fileType: "IMG",
+                                imageFile: a_split[1]
+                              };
+
+                              PostImage(params_picture).then(result => {
+                                if (result == "1") {
+                                  
+                                  this.changeLogoStep3()
+                                  console.log("finish step 2a");
+                                  Alert.alert("Bạn đã upload hình ảnh thành công")
+                                  this.onPressBox()   
+                                  console.log(isDisabled)          
+                                  parent.refreshDataFromServer();
+                                  this.props.navigation.goBack();
+                                                    
+                                   }
+                              });
+                            }
+                        
+
+                          } else if (c.length != 0 && b.length == 0) {
+                            
+                            console.log("chuỗi b rỗng")
+                            for (var i = 0; i < img1.length; i++) {
+                              var source_picture1 = img1[i].props.source.uri;
+                              var b_split = source_picture1.split(",");
+                              var params_picture1 = {
+                                fileType: "DOC",
+                                imageFile: b_split[1]
+                              };
+
+                              PostImage(params_picture1).then(result => {
+                                if (result == "1") {
+                                  this.changeLogoStep3()
+                                  console.log("finish step 2b");
+
+                                
+                                  Alert.alert("Bạn đã upload hình ảnh thành công")
+                                  this.onPressBox
+                                  console.log(isDisabled)
+                                  parent.refreshDataFromServer();
+                                  this.props.navigation.goBack();
+                                 
+                                }
+                              });
+                            }
+                            
+
                           }
-                        });
-                                       
-                       
-                      
-                      }
-                      
+
+                          else {
+                          // Up hình tài sản
+                            for (var i = 0; i < img.length; i++) {
+                              var source_picture = img[i].props.source.uri;
+                              var a_split = source_picture.split(",");
+                              var params_picture = {
+                                fileType: "IMG",
+                                imageFile: a_split[1]
+                              };
+
+                              PostImage(params_picture).then(result => {
+                                if (result == "1") {
+                                  this.changeLogoStep3()
+                                  console.log("finish step 2c");
+                                  
+                                }
+                              });
+
+                            }
+                          // Up hình tài liệu
+
+                            for (var i = 0; i < img1.length; i++) {
+                              var source_picture1 = img1[i].props.source.uri;
+                              var b_split = source_picture1.split(",");
+                              var params_picture1 = {
+                                fileType: "DOC",
+                                imageFile: b_split[1]
+                              };
+
+                              PostImage(params_picture1).then(result => {
+                                if (result == "1") {
+                                  this.changeLogoStep3()
+                                  console.log("finish step 2c");
+
+                                  // setTimeout(() =>{ this.props.navigation.goBack() 
+
+                                  // },2500);
+                                  Alert.alert("Bạn đã upload hình ảnh thành công")
+                                  this.onPressBox
+                                  console.log(isDisabled)
+                                  parent.refreshDataFromServer();
+                                  this.props.navigation.goBack();
+                                  
+                                }
+                            
+
+                              });
+                            }
+                          }
+
+                        }
+                      });
+
+                     
+
                     }
+                    
+
+                    }
+                    
+                    // disabled={   this.isCapture = true ? this.state.disabled = false : this.state.disabled = true}
                   >
                     <Text
-                      style={{ fontSize: 22, color: "#fff", fontWeight: "600" }}
+                      activeOpacity={enabled ? 0.5 : 1}
+                      style={isDisabled?styles.disabled:styles.enabled}
                     >
                       OK
                     </Text>
@@ -568,6 +711,13 @@ const styles = StyleSheet.create({
   resultpicture: {
     marginTop: 5,
     flexDirection: "row"
+  },
+  disabled: {
+    opacity: 0.3,fontSize: 22, color: "#fff", fontWeight: "600" ,
+  },
+  enabled: {
+    opacity: 1,
+    fontSize: 22, color: "#fff", fontWeight: "600" ,
   },
   titleContent: {
     color: "black",
@@ -641,19 +791,25 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "white",
     backgroundColor: "#002411",
-    padding: Platform.OS === "ios" ? 10 : 11.5
-  },
+    paddingLeft: Platform.OS === "ios" ? 10 : 20,
+    paddingRight: Platform.OS === "ios" ? 10 : 20,
+    paddingTop : Platform.OS === "ios" ? 12 : 13,
+    paddingBottom : Platform.OS === "ios" ? 12 : 13,  },
 
   tab2: {
     fontSize: 12,
     color: "white",
     backgroundColor: "#002411",
-    padding: Platform.OS === "ios" ? 10 : 11.5
-  },
+    paddingLeft: Platform.OS === "ios" ? 10 : 20,
+    paddingRight: Platform.OS === "ios" ? 10 : 20,
+    paddingTop : Platform.OS === "ios" ? 12 : 13,
+    paddingBottom : Platform.OS === "ios" ? 12 : 13,  },
   tab3: {
     fontSize: 12,
     color: "white",
     backgroundColor: "#002411",
-    padding: Platform.OS === "ios" ? 10 : 11.5
-  }
+    paddingLeft: Platform.OS === "ios" ? 10 : 20,
+    paddingRight: Platform.OS === "ios" ? 10 : 20,
+    paddingTop : Platform.OS === "ios" ? 12 : 13,
+    paddingBottom : Platform.OS === "ios" ? 12 : 13,  }
 });

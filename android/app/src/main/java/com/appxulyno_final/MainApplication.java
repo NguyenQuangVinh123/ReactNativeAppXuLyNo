@@ -2,6 +2,7 @@ package com.appxulyno_final;
 
 import android.app.Application;
 import com.airbnb.android.react.maps.MapsPackage;
+import com.showlocationservicesdialogbox.LocationServicesDialogBoxPackage;
 
 import com.facebook.react.ReactApplication;
 import com.imagepicker.ImagePickerPackage; // <-- add this import
@@ -27,7 +28,8 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
           new ImagePickerPackage(), // <-- add this line
-          new MapsPackage()
+          new MapsPackage(),
+          new LocationServicesDialogBoxPackage()
       );
     }
 

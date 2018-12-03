@@ -14,6 +14,7 @@ import UsersMap from './components/UsersMap'
 import { HSTHTNScreen, HSTDScreen, HSSTHScreen, DetailsScreen,DetailsHSSTHScreen,LoginScreen } from './screenNames';
 // import TestABCD from './components/TestABCD';
 import Login from './components/login/Login'
+import TestABCD from './components/TestABCD';
 const HSTHTNStack = createStackNavigator({
     HSTHTNScreen: {
         screen: HSTHTN, navigationOptions: {

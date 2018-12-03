@@ -338,7 +338,7 @@ async function PostImage(params) {
                 "imageFile" : params.imageFile 
                 
             }),
-            // JSON.stringify(params)
+           
             
 
         });

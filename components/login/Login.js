@@ -150,7 +150,6 @@ export default class Login extends Component {
     render() {
         return (
             
-
            
             <KeyboardAvoidingView
                 resetScrollToCoords={{ x: 0, y: 0 }}
@@ -185,6 +184,7 @@ export default class Login extends Component {
                             onChangeText={email => this.setState({ email })}
                             onSubmitEditing={() => this.passwordDom.focus()}
                             placeholderTextColor="#05713a"
+                            autoCorrect ={false}
                         />
                         <TextInput
                             ref={ref => {

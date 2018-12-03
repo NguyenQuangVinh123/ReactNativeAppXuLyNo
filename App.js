@@ -11,21 +11,20 @@ import {Platform, StyleSheet, Text, View,Dimensions} from 'react-native';
 import HSTHTN from './components/HSTHTN';
 import FetchLocation from './components/FetchLocation';
 import UsersMap from './components/UsersMap';
-import {StackNavigator } from 'react-navigation';
+import {createStackNavigator } from 'react-navigation';
 import Login from './components/login/Login'
 import TestABCD from './components/TestABCD'
 type Props = {};
-const Application = StackNavigator({
+const Application = createStackNavigator({
     Home : {screen : Login},
     TestABCD : {screen :  TestABCD}},{
+      initialRouteName: "Home",
       navigationOptions:{
         header :null,
       }
     }
 );
 export default class App extends Component<Props> {
-  
-  
   render() {
     return (
         <Application />

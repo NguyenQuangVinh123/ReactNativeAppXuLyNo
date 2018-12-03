@@ -43,7 +43,7 @@ class FlatListItem_HSSTH extends Component {
                     </View>
                     <View style={styles.column2}>
                         <Image style={styles.icon}
-                            source={require('../image/running.png')}
+                            source={require('../image/reading.png')}
                         />
                         <View style={{ width: 50, height: 50, borderRadius: 25, backgroundColor: "#4dbc3a", marginTop: 15, justifyContent: "center", alignItems: "center" }}>
                             <TouchableOpacity onPress={() => navigation.navigate(DetailsHSSTHScreen,{
@@ -202,6 +202,7 @@ const styles = StyleSheet.create({
 
     },
     icon: {
+        marginLeft: 10,
         width: 30,
         height: 30
     },
@@ -238,7 +239,10 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: 'white',
         backgroundColor: '#004b24',
-        padding: Platform.OS === "ios" ? 10 : 11.5
+        paddingLeft: Platform.OS === "ios" ? 10 : 20,
+        paddingRight: Platform.OS === "ios" ? 10 : 20,
+        paddingTop : Platform.OS === "ios" ? 12 : 13,
+        paddingBottom : Platform.OS === "ios" ? 12 : 13,
     },
     logo: {
         position: 'absolute',
@@ -251,12 +255,18 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: 'white',
         backgroundColor: '#004b24',
-        padding: Platform.OS === "ios" ? 10 : 11.5
-    },
+        paddingLeft: Platform.OS === "ios" ? 10 : 20,
+        paddingRight: Platform.OS === "ios" ? 10 : 20,
+        paddingTop : Platform.OS === "ios" ? 12 : 13,
+        paddingBottom : Platform.OS === "ios" ? 12 : 13,
+       },
     tab3: {
         fontSize: 12,
         color: 'white',
         backgroundColor: '#002411',
-        padding: Platform.OS === "ios" ? 10 : 11.5
-    },
+        paddingLeft: Platform.OS === "ios" ? 10 : 20,
+        paddingRight: Platform.OS === "ios" ? 10 : 20,
+        paddingTop : Platform.OS === "ios" ? 12 : 13,
+        paddingBottom : Platform.OS === "ios" ? 12 : 13,
+       },
 });

@@ -14,13 +14,11 @@ const usersMap = props => {
                 initialRegion={{                 
                         latitude: 10.83333,
                         longitude: 106.63278,
-                        latitudeDelta: 0.0922,
-                        longitudeDelta: 0.0421
+                        latitudeDelta: 0.02,
+                        longitudeDelta: 0.02
                     }}
                     region = {props.userLocation}
-                    >
-                
-                
+                    >               
                 {userLocationMarker} 
                
             </MapView>
