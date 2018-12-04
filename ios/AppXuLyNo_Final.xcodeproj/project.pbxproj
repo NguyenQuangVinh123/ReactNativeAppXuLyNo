@@ -1305,7 +1305,6 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = L9S5S8D53W;
-				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = AppXuLyNo_Final/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (
@@ -1326,7 +1325,6 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = L9S5S8D53W;
-				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = AppXuLyNo_Final/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_LDFLAGS = (

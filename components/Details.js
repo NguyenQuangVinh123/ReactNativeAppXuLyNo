@@ -15,7 +15,6 @@ import {
 import Button from "react-native-button";
 import { HSTHTNScreen } from "../screenNames";
 import Header from "./Header";
-import flatListData from "../data/flatListData";
 import { PostWork, PostImage } from "../networking/Server";
 import HSTD from './HSTD';
 import FetchLocation from "./FetchLocation";
@@ -34,8 +33,8 @@ const options = {
     path: "images",
     cameraRoll : false,
   },
-  quality : 0.8,
-  maxWidth : 2800,
+  quality : 0.7,
+  maxWidth : 2700,
   maxHeight : 1400,
 };
 
@@ -47,8 +46,8 @@ const options1 = {
     path: "images",
     cameraRoll : false,
   },
-  quality : 0.8,
-  maxWidth : 2800,
+  quality : 0.7,
+  maxWidth : 2700,
   maxHeight : 1400,
 
 };
@@ -164,10 +163,10 @@ export default class Details_HSTHTN extends Component {
       } else if (response.customButton) {
         console.log("User tapped custom button: ", response.customButton);
       } else {
-        const source = { uri: response.uri };
+        // const source = { uri: response.uri };
 
         // You can also display the image using data:
-        // const source = { uri: "data:image/jpeg;base64," + response.data };
+        const source = { uri: "data:image/jpeg;base64," + response.data };
         this.isCapture = true;
         this.setState({
           avatarSource1: source

@@ -3,7 +3,6 @@ import { Platform, StyleSheet, Text, View, Image, TouchableOpacity, FlatList, Re
 import Button from 'react-native-button';
 import { HSTDScreen, HSSTHScreen, DetailsScreen, HSTHTNScreen, LoginScreen } from '../screenNames';
 import Header from './Header';
-import flatListData from '../data/flatListData';
 import TestABCD from './TestABCD';
 import { TabBar } from '../index'
 import { StackActions, NavigationActions } from 'react-navigation';
@@ -180,7 +179,6 @@ export default class HSTHTN extends Component {
                     <FlatList
                         ref={"flatList"}
                         data={this.state.ListWorkFromServer}
-                        // data = {flatListData}
                         renderItem={({ item, index }) => {
                             return (<FlatListItem_HSTHTN navigation={this.props.navigation} item={item} index={index} parentFlatList={this} ></FlatListItem_HSTHTN>);
                         }}

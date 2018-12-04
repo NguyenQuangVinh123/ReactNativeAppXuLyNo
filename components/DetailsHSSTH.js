@@ -15,7 +15,6 @@ import {
 import Button from "react-native-button";
 import { HSTHTNScreen } from "../screenNames";
 import Header from "./Header";
-import flatListData from "../data/flatListData";
 import { PostWork, PostImage } from "../networking/Server";
 import { refreshDataFromServer } from "./HSTHTN";
 import FetchLocation from "./FetchLocation";

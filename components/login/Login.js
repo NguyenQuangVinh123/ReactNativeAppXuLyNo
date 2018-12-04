@@ -58,7 +58,7 @@ export default class Login extends Component {
         // };
         // console.log(saveUserId);
 
-        fetch("http://10.160.4.49:8822/Login", {
+        fetch("http://10.96.20.95:8822/Login", {
             "method": "POST",
             headers: {
                 "Accept": "application/json",
