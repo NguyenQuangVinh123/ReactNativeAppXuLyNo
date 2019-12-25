@@ -1,3 +1,3 @@
 # ReactNativeAppXuLyNo
 
-Test App
+App using React-Native
