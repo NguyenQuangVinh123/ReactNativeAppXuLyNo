@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { AppRegistry, SectionList, StyleSheet, Text, View, Platform, Alert, AsyncStorage } from 'react-native';
-const apiGetListViec = 'http://10.96.20.95:8822/GetScheduleAppointment'; // api get
-const apiPostWork = 'http://10.96.20.95:8822/CompleteAppointment'; // api post
-const apiGetDetailsListViec = 'http://10.96.20.95:8822/GetAppointmentDetail';
-const apiPostImage = "http://10.96.20.95:8822/UploadImage";
+const apiGetListViec = 'http://yourAPI/GetScheduleAppointment'; // api get
+const apiPostWork = 'http://yourAPI/CompleteAppointment'; // api post
+const apiGetDetailsListViec = 'yourAPI/GetAppointmentDetail';
+const apiPostImage = "http://yourAPI/UploadImage";
 getSessionId = async () => {
     let sessionID = '';
     try {
